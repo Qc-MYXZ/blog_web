@@ -1,0 +1,56 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 安装 cnpm
+      - name: Install cnpm
+        run: |
+          npm install -g cnpm
+
+      - name: Install dependencies
+        run: cnpm install
+
+      - name: Check Linting
+        run: cnpm run lint
+
+      - name: Check Format
+        run: cnpm run format
+
+      - name: Build the project
+        run: cnpm run build
+
+      # 设置 SSH
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.hua }}  # 使用名为 'hua' 的 GitHub Secret
+
+      # 上传构建结果到指定路径
+      - name: Deploy to Server
+        run: |
+          scp -r .output/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/opt/blog_web/.output/
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.hua }}  # 使用名为 'hua' 的 GitHub Secret
+
+      # 重启 PM2
+      - name: Restart PM2 application
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'pm2 restart blog_web'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.hua }}  # 使用名为 'hua' 的 GitHub Secret
