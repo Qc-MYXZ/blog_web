@@ -46,7 +46,7 @@ jobs:
       # 上传构建结果到指定路径
       - name: Deploy to Server
         run: |
-          scp -r .output/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/opt/blog_web/.output/
+          scp -r .output/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/opt/blog_web/
         env:
           SSH_PRIVATE_KEY: ${{ secrets.HUA }} 
 
