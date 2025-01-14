@@ -14,22 +14,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 安装 cnpm
-      - name: Install cnpm
+      # 安装 pnpm
+      - name: Install pnpm
         run: |
-          npm install -g cnpm
+          npm install -g pnpm
 
       - name: Install dependencies
-        run: cnpm install
+        run: pnpm install
 
       - name: Check Linting
-        run: cnpm run lint
+        run: pnpm run lint
 
       - name: Check Format
-        run: cnpm run format
+        run: pnpm run format
 
       - name: Build the project
-        run: cnpm run build
+        run: pnpm run build
 
       # 设置 SSH
       - name: Setup SSH
