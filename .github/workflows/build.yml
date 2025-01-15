@@ -29,8 +29,8 @@ jobs:
       #   run: pnpm run format
       #   continue-on-error: true  # 允许格式问题不导致工作流失败
 
-      # - name: Build the project
-      #   run: pnpm run build
+      - name: Build the project
+        run: pnpm run build
 
       # 设置 SSH
       - name: Setup SSH
