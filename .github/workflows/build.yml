@@ -49,9 +49,6 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.HUA }}
 
-      - name: Verify uploaded files on the server
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'ls -l /opt/blog_web/'
 
       # 重启 PM2
       - name: Restart PM2 application
